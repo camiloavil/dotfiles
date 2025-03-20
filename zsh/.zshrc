@@ -10,6 +10,9 @@ fi
 # Source/Load zinit
 source "${ZINIT_HOME}/zinit.zsh"
 
+# Loads Neovim instalation
+# export PATH="$PATH:/opt/nvim-linux64/bin"
+
 # Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
@@ -62,48 +65,24 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 #zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
-# Set TERM to xterm-256color
-export TERM=xterm-256color
+# Aliases
+alias ls='ls --color'
+alias vim='nvim'
+alias c='clear'
+# Alias Docker personal
+alias dp="docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}'"
+alias dpp="docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}'"
+alias dcu="docker compose up"
+alias dcud="docker compose up -d"
+alias dcd="docker compose down"
 
-#Homebrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-#Zoxide
-eval "$(zoxide init zsh)"
-#UV python completions
-eval "$(uv generate-shell-completion zsh)"
-
-# User configuration
-
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Example aliases
-alias cl="clear"
-alias nv="nvim"
-alias lg="lazygit"
-alias vpnStop="sudo systemctl stop 'wg-quick@*'"
-alias vpnKmiP="sudo systemctl start wg-quick@KmiPersonal.service"
-alias vpnRpi="sudo systemctl start wg-quick@laptop_rpi.service"
-alias po="pass otp -c "
-alias pa="pass -c "
-
-#Sesh Integration
+#sesh Integrations
 function sesh-sessions() {
   {
     exec </dev/tty
     exec <&1
     local session
-    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡ Sessions')
+    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  Sessions')
     zle reset-prompt > /dev/null 2>&1 || true
     [[ -z "$session" ]] && return
     sesh connect $session
@@ -114,31 +93,26 @@ bindkey -M emacs '\es' sesh-sessions
 bindkey -M vicmd '\es' sesh-sessions
 bindkey -M viins '\es' sesh-sessions
 
-#loads NVM directory to path
+# Fuzzy Finder
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# StarShip
+eval "$(starship init zsh)"
+
+# Instalation of NVM
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#Homebrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+#Zoxide
+eval "$(zoxide init zsh)"
+#UV python completions 
+eval "$(uv generate-shell-completion zsh)"
 
-# If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-# load ~/.local/bin to PATH
-export PATH="$PATH:$HOME/.local/bin"
-#load Zig to Path
-export PATH="$PATH:$HOME/.local/zig-linux-x86_64-0.13.0"
-#load Ghostty to Path
-export PATH="$PATH:$HOME/.local/ghostty/zig-out/bin/"
-
-#
 # load OPENAI_API_KEY
 if [[ -z "${OPENAI_API_KEY}" ]]; then
     export OPENAI_API_KEY=$(pass show key/openai/nvimkey)
 fi
 
-# Set editor to nvim
 export EDITOR=nvim
-export VISUAL=nvim
-
-#fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# StarShip
-eval "$(starship init zsh)"
+export VISUAL=less
