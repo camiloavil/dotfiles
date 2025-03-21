@@ -102,9 +102,19 @@ alias pa="pass -c "
 alias l="llm"
 alias lc="llm -c"
 alias le="llm -t english"
-alias ac="autocommit"
-alias autocommit="( git diff --cached | llm -t gcommit > /tmp/commit.txt && less /tmp/commit.txt && (cat /tmp/commit.txt | xargs git commit -m)) && rm /tmp/commit.txt"
-# alias autocommit="( git diff --cached | llm -t gcommit > /tmp/commit.txt && less /tmp/commit.txt && (git commit -m '$(cat /tmp/commit.txt)') && rm /tmp/commit.txt"
+
+# function autocommit() {
+#     echo "Let's AutoCommit"
+#     local commit_file="/tmp/commit.txt"
+#     trap 'rm -f "$commit_file"' EXIT
+#
+#     git diff --cached | llm -t gcommit > "$commit_file"
+#     less "$commit_file"
+#     git commit -m "$(cat "$commit_file")"
+# }
+# alias ac="autocommit"
+# alias autocommit="( git diff --cached | llm -t gcommit > /tmp/commit.txt && less /tmp/commit.txt && (cat /tmp/commit.txt | xargs git commit -m)) && rm /tmp/commit.txt"
+# alias autocommit="( git diff --cached | llm -t gcommit > /tmp/commit.txt && less /tmp/commit.txt && (git commit -m \"$(cat /tmp/commit.txt)\") && rm /tmp/commit.txt"
 
 
 #Sesh Integration
