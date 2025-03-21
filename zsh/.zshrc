@@ -88,14 +88,21 @@ export LANG=en_US.UTF-8
 # export ARCHFLAGS="-arch x86_64"
 
 # Example aliases
-alias cl="clear"
+alias c="clear"
 alias nv="nvim"
+alias vim="nvim"
 alias lg="lazygit"
 alias vpnStop="sudo systemctl stop 'wg-quick@*'"
 alias vpnKmiP="sudo systemctl start wg-quick@KmiPersonal.service"
 alias vpnRpi="sudo systemctl start wg-quick@laptop_rpi.service"
+# Aliaa pass
 alias po="pass otp -c "
 alias pa="pass -c "
+# Alias llm
+alias l="llm"
+alias lc="llm -c"
+alias le="llm -t english"
+alias lg="git diff --cached | llm -t gcommit > commit.txt"
 
 #Sesh Integration
 function sesh-sessions() {
