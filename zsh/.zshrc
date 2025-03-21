@@ -102,7 +102,10 @@ alias pa="pass -c "
 alias l="llm"
 alias lc="llm -c"
 alias le="llm -t english"
-alias lg="git diff --cached | llm -t gcommit > commit.txt"
+alias ac="autocommit"
+alias autocommit="( git diff --cached | llm -t gcommit > /tmp/commit.txt && less /tmp/commit.txt && (cat /tmp/commit.txt | xargs git commit -m)) && rm /tmp/commit.txt"
+# alias autocommit="( git diff --cached | llm -t gcommit > /tmp/commit.txt && less /tmp/commit.txt && (git commit -m '$(cat /tmp/commit.txt)') && rm /tmp/commit.txt"
+
 
 #Sesh Integration
 function sesh-sessions() {
