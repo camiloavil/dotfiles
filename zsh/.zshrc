@@ -62,6 +62,15 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 #zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
+# Set editor to nvim
+export EDITOR=nvim
+export VISUAL=nvim
+
+#loads NVM directory to path
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 # Set TERM to xterm-256color
 export TERM=xterm-256color
 
@@ -72,72 +81,27 @@ eval "$(zoxide init zsh)"
 #UV python completions
 eval "$(uv generate-shell-completion zsh)"
 
-# User configuration
-
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
-
 # Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+export ARCHFLAGS="-arch x86_64"
 
-# Example aliases
-alias c="clear"
-alias nv="nvim"
-alias vim="nvim"
-alias lg="lazygit"
-alias vpnStop="sudo systemctl stop 'wg-quick@*'"
-alias vpnKmiP="sudo systemctl start wg-quick@KmiPersonal.service"
-alias vpnRpi="sudo systemctl start wg-quick@laptop_rpi.service"
-# Aliaa pass
-alias po="pass otp -c "
-alias pa="pass -c "
-# Alias llm
-alias l="llm"
-alias lc="llm -c"
-alias le="llm -t english"
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
-# function autocommit() {
-#     echo "Let's AutoCommit"
-#     local commit_file="/tmp/commit.txt"
-#     trap 'rm -f "$commit_file"' EXIT
-#
-#     git diff --cached | llm -t gcommit > "$commit_file"
-#     less "$commit_file"
-#     git commit -m "$(cat "$commit_file")"
-# }
-# alias ac="autocommit"
-# alias autocommit="( git diff --cached | llm -t gcommit > /tmp/commit.txt && less /tmp/commit.txt && (cat /tmp/commit.txt | xargs git commit -m)) && rm /tmp/commit.txt"
-# alias autocommit="( git diff --cached | llm -t gcommit > /tmp/commit.txt && less /tmp/commit.txt && (git commit -m \"$(cat /tmp/commit.txt)\") && rm /tmp/commit.txt"
-
+# Load aliases
+source ~/.zsh/zsh_alias
 
 #Sesh Integration
-function sesh-sessions() {
-  {
-    exec </dev/tty
-    exec <&1
-    local session
-    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡ Sessions')
-    zle reset-prompt > /dev/null 2>&1 || true
-    [[ -z "$session" ]] && return
-    sesh connect $session
-  }
-}
-zle     -N             sesh-sessions
-bindkey -M emacs '\es' sesh-sessions
-bindkey -M vicmd '\es' sesh-sessions
-bindkey -M viins '\es' sesh-sessions
+source ~/.zsh/zsh_sesh
 
-#loads NVM directory to path
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#load my env variables
+source ~/.zsh/zsh_env
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -147,16 +111,6 @@ export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.local/zig-linux-x86_64-0.13.0"
 #load Ghostty to Path
 export PATH="$PATH:$HOME/.local/ghostty/zig-out/bin/"
-
-#
-# load OPENAI_API_KEY
-if [[ -z "${OPENAI_API_KEY}" ]]; then
-    export OPENAI_API_KEY=$(pass show key/openai/nvimkey)
-fi
-
-# Set editor to nvim
-export EDITOR=nvim
-export VISUAL=nvim
 
 #fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
