@@ -66,7 +66,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 #zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Aliases
-alias ls='ls --color'
+alias ls="ls -alh --color"
 alias vim='nvim'
 alias c='clear'
 # Alias Docker personal
@@ -75,6 +75,12 @@ alias dpp="docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}
 alias dcu="docker compose up"
 alias dcud="docker compose up -d"
 alias dcd="docker compose down"
+# Alias llm
+alias l="llm"
+alias lc="llm -c"
+# Alias pass
+alias pa="pass -c"
+alias po="pass otp -c"
 
 #sesh Integrations
 function sesh-sessions() {
