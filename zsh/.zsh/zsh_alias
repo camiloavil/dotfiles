@@ -1,27 +1,35 @@
 function autocommit() {
     if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-        echo "Error: Not a Git repository"
+        echo "Error: Not a Git repository. Please navigate to a Git repository and try again."
         return 1
     fi
 
     if git diff --cached --quiet; then
-        echo "Error: No changes staged for commit"
+        echo "Error: No changes staged for commit. Please stage your changes and try again."
         return 1
     fi
 
     echo "Let's AutoCommit"
     local commit_file="/tmp/commit.txt"
-    # trap 'rm -f "$commit_file"' EXIT
-    trap 'echo "Finish AutoCommit"' EXIT
+    trap 'rm -f "$commit_file"; echo "Finish AutoCommit"' EXIT
 
-    git diff --cached | llm -t gcommit > "$commit_file"
-    less "$commit_file"
-    cat "$commit_file"
-    git commit -m "$(cat "$commit_file")"
-    rm -f "$commit_file"
+    if ! git diff --cached | llm -t gcommit > "$commit_file"; then
+        echo "Error: Failed to generate commit message."
+        return 1
+    fi
+
+    if ! less "$commit_file"; then
+        echo "Error: Failed to display commit message."
+        return 1
+    fi
+
+    if ! git commit -m "$(cat "$commit_file")"; then
+        echo "Error: Git commit failed."
+        return 1
+    fi
 }
+
 alias ac="autocommit"
-# alias autocommit_II="( git diff --cached | llm -t gcommit > /tmp/commit.txt && less /tmp/commit.txt && (git commit -m \"$(cat /tmp/commit.txt)\") && rm /tmp/commit.txt"
 
 # Example aliases
 alias c="clear"
