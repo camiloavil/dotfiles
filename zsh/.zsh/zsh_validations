@@ -12,4 +12,5 @@ validate_command "llm"
 validate_command "pass"
 # Validate sesh
 validate_command "sesh"
-
+# Validate nvim
+validate_command "nvim"
