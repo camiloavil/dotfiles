@@ -93,6 +93,8 @@ if [[ -n $SSH_CONNECTION ]]; then
 else
   export EDITOR='nvim'
 fi
+# Validate Tools
+source ~/.zsh/zsh_validations
 
 # Load aliases
 source ~/.zsh/zsh_alias
