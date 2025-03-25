@@ -1,3 +1,16 @@
+#Setting $PATH.
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+# load ~/.local/bin to PATH
+export PATH="$PATH:$HOME/.local/bin"
+#load Zig to Path
+export PATH="$PATH:$HOME/.local/zig-linux-x86_64-0.13.0"
+#load Ghostty to Path
+export PATH="$PATH:$HOME/.local/ghostty/zig-out/bin/"
+
+# StarShip
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG=~/.config/starship/starship.toml
+
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
@@ -37,9 +50,21 @@ autoload -Uz compinit && compinit
 zinit cdreplay -q
 
 # Keybindings
-bindkey -e
-bindkey '^p' history-search-backward
-bindkey '^n' history-search-forward
+# Emacs mode 
+# bindkey -e
+# bindkey '^p' history-search-backward
+# bindkey '^n' history-search-forward
+
+# Vi mode
+bindkey -v
+# Configure keybindings in Vi normal mode
+bindkey -M vicmd 'k' history-search-backward  # Use 'k' to search backward in history
+bindkey -M vicmd 'j' history-search-forward   # Use 'j' to search forward in history
+
+# Configure keybindings in Vi insert mode
+bindkey -M viins '^p' history-search-backward # Use 'Ctrl + p' to search backward in history
+bindkey -M viins '^n' history-search-forward  # Use 'Ctrl + n' to search forward in history
+
 bindkey '^[w' kill-region
 
 # History
@@ -61,9 +86,6 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 #zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
-
-# Vi mode
-bindkey -v
 
 # Set editor to nvim
 export EDITOR=nvim
@@ -108,16 +130,5 @@ source ~/.zsh/zsh_sesh
 #load my env variables
 source ~/.zsh/zsh_env
 
-# If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-# load ~/.local/bin to PATH
-export PATH="$PATH:$HOME/.local/bin"
-#load Zig to Path
-export PATH="$PATH:$HOME/.local/zig-linux-x86_64-0.13.0"
-#load Ghostty to Path
-export PATH="$PATH:$HOME/.local/ghostty/zig-out/bin/"
-
 #fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# StarShip
-eval "$(starship init zsh)"
