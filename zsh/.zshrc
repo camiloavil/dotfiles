@@ -62,6 +62,9 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 #zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
+# Vi mode
+bindkey -v
+
 # Set editor to nvim
 export EDITOR=nvim
 export VISUAL=nvim
