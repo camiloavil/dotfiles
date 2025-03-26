@@ -7,6 +7,19 @@ export PATH="$PATH:$HOME/.local/zig-linux-x86_64-0.13.0"
 #load Ghostty to Path
 export PATH="$PATH:$HOME/.local/ghostty/zig-out/bin/"
 
+# Set TERM to xterm-256color
+export TERM=xterm-256color
+
+# Set editor to nvim
+export EDITOR=nvim
+export VISUAL=nvim
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+# Compilation flags
+export ARCHFLAGS="-arch x86_64"
+
 # StarShip
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
@@ -62,8 +75,10 @@ bindkey -M vicmd 'k' history-search-backward  # Use 'k' to search backward in hi
 bindkey -M vicmd 'j' history-search-forward   # Use 'j' to search forward in history
 
 # Configure keybindings in Vi insert mode
+bindkey -M viins '^f' autosuggest-accept  # Use 'Ctrl + f' to accept autosuggestions in Vi insert mode
 bindkey -M viins '^p' history-search-backward # Use 'Ctrl + p' to search backward in history
 bindkey -M viins '^n' history-search-forward  # Use 'Ctrl + n' to search forward in history
+bindkey -M viins '^l' vi-cmd-mode  # Use 'Ctrl + l' to exit insert mode in Vi
 
 bindkey '^[w' kill-region
 
@@ -85,19 +100,12 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-#zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
-
-# Set editor to nvim
-export EDITOR=nvim
-export VISUAL=nvim
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 #loads NVM directory to path
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Set TERM to xterm-256color
-export TERM=xterm-256color
 
 #Homebrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -106,18 +114,6 @@ eval "$(zoxide init zsh)"
 #UV python completions
 eval "$(uv generate-shell-completion zsh)"
 
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-
-# Compilation flags
-export ARCHFLAGS="-arch x86_64"
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
 # Validate Tools
 source ~/.zsh/zsh_validations
 
@@ -132,3 +128,4 @@ source ~/.zsh/zsh_env
 
 #fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(fzf --zsh)"
