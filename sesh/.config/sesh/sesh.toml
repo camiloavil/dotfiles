@@ -52,6 +52,6 @@ name = "Obsidian"
 path = "~/Nextcloud/Obsidian/"
 
 [[session]]
-name = "SerPst server"
-path = "~/"
-startup_command = "sudo systemctl start wg-quick@KmiPersonal.service && ssh kmiadmin@serpst -X || echo 'Error VPN connection'"
+name = "SSH config"
+path = "~/.ssh/"
+startup_command = "nvim -c ':Telescope find_files'"
