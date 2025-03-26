@@ -41,3 +41,8 @@ startup_command = "nvim ./sesh.toml"
 name = "Obsidian"
 path = "~/Nextcloud/Obsidian/"
 startup_command = "nvim"
+
+[[session]]
+name = "SSH config"
+path = "~/.ssh/"
+startup_command = "nvim -c ':Telescope find_files'"

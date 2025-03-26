@@ -1,0 +1,6 @@
+
+# load OPENAI_API_KEY
+if [[ -z "${OPENAI_API_KEY}" ]]; then
+    export OPENAI_API_KEY=$(pass show key/openai/nvimkey)
+fi
+

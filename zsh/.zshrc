@@ -1,3 +1,29 @@
+#Setting $PATH.
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+# load ~/.local/bin to PATH
+export PATH="$PATH:$HOME/.local/bin"
+#load Zig to Path
+export PATH="$PATH:$HOME/.local/zig-linux-x86_64-0.13.0"
+#load Ghostty to Path
+export PATH="$PATH:$HOME/.local/ghostty/zig-out/bin/"
+
+# Set TERM to xterm-256color
+export TERM=xterm-256color
+
+# Set editor to nvim
+export EDITOR=nvim
+export VISUAL=nvim
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+# Compilation flags
+export ARCHFLAGS="-arch x86_64"
+
+# StarShip
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG=~/.config/starship/starship.toml
+
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
@@ -40,13 +66,27 @@ autoload -Uz compinit && compinit
 zinit cdreplay -q
 
 # Keybindings
-bindkey -e
-bindkey '^p' history-search-backward
-bindkey '^n' history-search-forward
+# Emacs mode 
+# bindkey -e
+# bindkey '^p' history-search-backward
+# bindkey '^n' history-search-forward
+
+# Vi mode
+bindkey -v
+# Configure keybindings in Vi normal mode
+bindkey -M vicmd 'k' history-search-backward  # Use 'k' to search backward in history
+bindkey -M vicmd 'j' history-search-forward   # Use 'j' to search forward in history
+
+# Configure keybindings in Vi insert mode
+bindkey -M viins '^f' autosuggest-accept  # Use 'Ctrl + f' to accept autosuggestions in Vi insert mode
+bindkey -M viins '^p' history-search-backward # Use 'Ctrl + p' to search backward in history
+bindkey -M viins '^n' history-search-forward  # Use 'Ctrl + n' to search forward in history
+bindkey -M viins '^l' vi-cmd-mode  # Use 'Ctrl + l' to exit insert mode in Vi
+
 bindkey '^[w' kill-region
 
 # History
-HISTSIZE=5000
+HISTSIZE=50000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
@@ -63,62 +103,32 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-#zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
-# Aliases
-alias ls="ls -alh --color"
-alias vim='nvim'
-alias c='clear'
-# Alias Docker personal
-alias dp="docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}'"
-alias dpp="docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}'"
-alias dcu="docker compose up"
-alias dcud="docker compose up -d"
-alias dcd="docker compose down"
-# Alias llm
-alias l="llm"
-alias lc="llm -c"
-# Alias pass
-alias pa="pass -c"
-alias po="pass otp -c"
-
-#sesh Integrations
-function sesh-sessions() {
-  {
-    exec </dev/tty
-    exec <&1
-    local session
-    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  Sessions')
-    zle reset-prompt > /dev/null 2>&1 || true
-    [[ -z "$session" ]] && return
-    sesh connect $session
-  }
-}
-zle     -N             sesh-sessions
-bindkey -M emacs '\es' sesh-sessions
-bindkey -M vicmd '\es' sesh-sessions
-bindkey -M viins '\es' sesh-sessions
-
-# Fuzzy Finder
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# StarShip
-eval "$(starship init zsh)"
-
-# Instalation of NVM
+#loads NVM directory to path
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 #Homebrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 #Zoxide
 eval "$(zoxide init zsh)"
-#UV python completions 
+#UV python completions
 eval "$(uv generate-shell-completion zsh)"
 
-# load OPENAI_API_KEY
-if [[ -z "${OPENAI_API_KEY}" ]]; then
-    export OPENAI_API_KEY=$(pass show key/openai/nvimkey)
-fi
+# Validate Tools
+source ~/.zsh/zsh_validations
 
-export EDITOR=nvim
-export VISUAL=less
+# Load aliases
+source ~/.zsh/zsh_alias
+
+#Sesh Integration
+source ~/.zsh/zsh_sesh
+
+#load my env variables
+source ~/.zsh/zsh_env
+
+#fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(fzf --zsh)"

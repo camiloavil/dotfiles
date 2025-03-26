@@ -1,0 +1,18 @@
+# Validate the existence of required commands
+
+function validate_command() {
+    if ! command -v "$1" &> /dev/null; then
+        echo "Warning: '$1' is not installed or not in your PATH."
+    fi
+}
+
+# Validate llm
+validate_command "llm"
+# Validate pass
+validate_command "pass"
+# Validate sesh
+validate_command "sesh"
+# Validate nvim
+validate_command "nvim"
+# Validate tmux
+validate_command "tmux"
