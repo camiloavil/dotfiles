@@ -111,6 +111,7 @@ export NVM_DIR="$HOME/.nvm"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 #Zoxide
 eval "$(zoxide init zsh)"
+eval "$(zoxide init --cmd cd zsh)"
 #UV python completions
 eval "$(uv generate-shell-completion zsh)"
 
