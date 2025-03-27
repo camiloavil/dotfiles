@@ -50,6 +50,7 @@ startup_command = "nvim ./sesh.toml"
 [[session]]
 name = "Obsidian"
 path = "~/Nextcloud/Obsidian/"
+startup_command = "nvim"
 
 [[session]]
 name = "SSH config"
