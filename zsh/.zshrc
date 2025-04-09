@@ -2,10 +2,6 @@
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 # load ~/.local/bin to PATH
 export PATH="$PATH:$HOME/.local/bin"
-#load Zig to Path
-export PATH="$PATH:$HOME/.local/zig-linux-x86_64-0.13.0"
-#load Ghostty to Path
-export PATH="$PATH:$HOME/.local/ghostty/zig-out/bin/"
 
 # Set TERM to xterm-256color
 export TERM=xterm-256color
@@ -70,6 +66,7 @@ zinit cdreplay -q
 
 # Vi mode
 bindkey -v
+export VI_MODE_SET_CURSOR=true
 # Configure keybindings in Vi normal mode
 bindkey -M vicmd 'k' history-search-backward  # Use 'k' to search backward in history
 bindkey -M vicmd 'j' history-search-forward   # Use 'j' to search forward in history
@@ -107,8 +104,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+#fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(fzf --zsh)"
 #Homebrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 #Zoxide
 eval "$(zoxide init zsh)"
 eval "$(zoxide init --cmd cd zsh)"
@@ -127,6 +127,3 @@ source ~/.zsh/zsh_sesh
 #load my env variables
 source ~/.zsh/zsh_env
 
-#fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-eval "$(fzf --zsh)"

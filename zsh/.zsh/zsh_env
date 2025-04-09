@@ -1,6 +1,22 @@
 
-# load OPENAI_API_KEY
-if [[ -z "${OPENAI_API_KEY}" ]]; then
-    export OPENAI_API_KEY=$(pass show key/openai/nvimkey)
-fi
-
+function check_openai_key() {
+  # Function to retrieve and set the OpenAI API key from password store
+  if [[ -z "${OPENAI_API_KEY}" || "$1" == "--force" ]]; then
+    # Try to load the API key from pass
+    echo "Loading OpenAI API key from password store..."
+    if ! API_KEY=$(pass show key/openai/nvimkey 2>/dev/null); then
+      echo "Error: Could not retrieve OpenAI API key. Please check your password store."
+      return 1
+    fi
+    
+    # Set the API key
+    export OPENAI_API_KEY=$API_KEY
+    echo "OpenAI API key loaded successfully."
+  fi
+}
+# Alias definitions for LLM usage
+alias llm="check_openai_key && llm"  # Main command with key verification
+alias llm-refresh="check_openai_key --force && llm"  # Force refresh the API key
+alias l="llm"                        # Short alias for llm
+alias lc="llm -c"                    # For conversation mode
+alias le="llm -t english"            # Translate to English

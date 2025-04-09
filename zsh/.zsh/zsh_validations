@@ -16,3 +16,9 @@ validate_command "sesh"
 validate_command "nvim"
 # Validate tmux
 validate_command "tmux"
+# Validate fzf
+validate_command "fzf"
+# Validate zoxide
+validate_command "zoxide"
+# Validate npm
+validate_command "npm"
