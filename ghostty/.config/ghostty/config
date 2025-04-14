@@ -17,14 +17,12 @@
 
 # Config syntax crash course
 # ==========================
-font-family = Iosevka
-font-size = 8
-title = Ghostty
-class = Ghostty
-fullscreen = true
-window-decoration = none
-# background-opacity = 0.9
+theme = tokyonight_night
 # theme = Darkside
+class = Ghostty
+# fullscreen = true
+# window-decoration = none
+background-opacity = 0.92
 
 # Keybins Configuration
 # keybind = clear
