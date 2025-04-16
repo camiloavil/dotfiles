@@ -4,7 +4,7 @@ function check_openai_key() {
   if [[ -z "${OPENAI_API_KEY}" || "$1" == "--force" ]]; then
     # Try to load the API key from pass
     echo "Loading OpenAI API key from password store..."
-    if ! API_KEY=$(pass show key/openai/nvimkey 2>/dev/null); then
+    if ! API_KEY=$(pass show key/openai/llm-key 2>/dev/null); then
       echo "Error: Could not retrieve OpenAI API key. Please check your password store."
       return 1
     fi
