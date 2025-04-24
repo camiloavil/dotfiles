@@ -41,7 +41,7 @@ alias lg="lazygit"
 alias vpnStop="sudo systemctl stop 'wg-quick@*'"
 alias vpnKmiP="sudo systemctl start wg-quick@KmiPersonal.service"
 alias vpnRpi="sudo systemctl start wg-quick@laptop_rpi.service"
-# Aliaa pass
+# Alias pass
 alias po="pass otp -c "
 alias pa="pass -c "
 

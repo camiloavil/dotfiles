@@ -15,7 +15,7 @@ function check_openai_key() {
   fi
 }
 # Alias definitions for LLM usage
-alias llm="check_openai_key && llm"  # Main command with key verification
+# alias llm="check_openai_key && llm"  # Main command with key verification
 alias llm-refresh="check_openai_key --force && llm"  # Force refresh the API key
 alias l="llm"                        # Short alias for llm
 alias lc="llm -c"                    # For conversation mode
