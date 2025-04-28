@@ -15,12 +15,12 @@ startup_command = "yazi"
 
 [[session]]
 name = "ZSH config"
-path = "~/"
+path = "~/dotfiles/zsh/"
 startup_command = "nvim .zshrc"
 
 [[session]]
 name = "tmux config"
-path = "~/"
+path = "~/dotfiles/tmux/"
 startup_command = "nvim .tmux.conf"
 
 [[session]]
@@ -52,7 +52,3 @@ name = "Obsidian"
 path = "~/Nextcloud/Obsidian/"
 startup_command = "nvim"
 
-[[session]]
-name = "SSH config"
-path = "~/.ssh/"
-startup_command = "nvim -c ':Telescope find_files'"
