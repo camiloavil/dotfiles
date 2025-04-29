@@ -98,14 +98,15 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # Validate Tools
 source ~/.zsh/zsh_validations
 
+# load functions
+source ~/.zsh/functions/llm_wrapper.sh
+source ~/.zsh/functions/autocommit.sh
+
 # Load aliases
 source ~/.zsh/zsh_alias
 
 #Sesh Integration
 source ~/.zsh/zsh_sesh
-
-#load my env variables
-source ~/.zsh/zsh_env
 
 # StarShip
 eval "$(starship init zsh)"

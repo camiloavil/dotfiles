@@ -1,7 +1,7 @@
 source ~/.zsh/functions/check_env.sh
 
 # Create a wrapper function for llm instead of an alias to avoid recursion
-function llm_wrapper() {
+llm_wrapper() {
   # Define the environment variable and pass path
   local env_var="OPENAI_API_KEY"
   local pass_path="key/openai/llm-key"
@@ -23,12 +23,3 @@ function llm_wrapper() {
   fi
 }
 
-
-# Use the wrapper function in aliases
-alias llm="llm_wrapper"  # Main command with key verificatin
-alias load_env_keys="source ~/.zsh/load_env_keys.sh"
-alias load_OPENAI_KEY="check_env_key 'OPENAI_API_KEY' 'key/openai/llm-key'"
-alias load_CLAUDE_KEY="check_env_key 'ANTHROPIC_API_KEY' 'key/claude/nvim-code'"
-alias l="llm"    # Short alias for llm
-alias lc="llm -c"  # For conversation mode
-alias le="llm -t english"  # Translate to English
