@@ -16,10 +16,6 @@ export LANG=en_US.UTF-8
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
-# StarShip
-eval "$(starship init zsh)"
-export STARSHIP_CONFIG=~/.config/starship/starship.toml
-
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
@@ -99,18 +95,6 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
-#loads NVM directory to path
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
-#Zoxide
-eval "$(zoxide init zsh)"
-#UV python completions
-eval "$(uv generate-shell-completion zsh)"
-
 # Validate Tools
 source ~/.zsh/zsh_validations
 
@@ -122,4 +106,18 @@ source ~/.zsh/zsh_sesh
 
 #load my env variables
 source ~/.zsh/zsh_env
+
+# StarShip
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG=~/.config/starship/starship.toml
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+#Zoxide
+eval "$(zoxide init zsh)"
+#UV python completions
+eval "$(uv generate-shell-completion zsh)"
+#loads NVM directory to path
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 

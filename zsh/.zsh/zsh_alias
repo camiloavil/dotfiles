@@ -32,7 +32,7 @@ function autocommit() {
 alias ac="autocommit"
 
 # Example aliases
-alias ls="ls -alh --color"
+alias ls="lsd -alh"
 alias cl="clear"
 alias nv="nvim"
 alias vim="nvim"
