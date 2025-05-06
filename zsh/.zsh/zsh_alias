@@ -1,0 +1,22 @@
+# My functions alias
+alias ac="autocommit"
+alias llm="llm_wrapper"
+
+# Use the wrapper function in aliases
+alias l="llm"    # Short alias for llm
+alias lc="llm -c"  # For conversation mode
+alias le="llm -t english"  # Translate to English
+# Example aliases
+alias ls="lsd -alh"
+alias cl="clear"
+alias nv="nvim"
+alias vim="nvim"
+alias lg="lazygit"
+# Alias VPN
+alias vpnStop="sudo systemctl stop 'wg-quick@*'"
+alias vpnKmiP="sudo systemctl start wg-quick@KmiPersonal.service"
+alias vpnRpi="sudo systemctl start wg-quick@laptop_rpi.service"
+# Alias pass
+alias po="pass otp -c "
+alias pa="pass -c "
+
