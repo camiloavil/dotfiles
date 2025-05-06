@@ -1,0 +1,50 @@
+# This is the configuration file for Ghostty.
+#
+# This template file has been automatically created at the following
+# path since Ghostty couldn't find any existing config files on your system:
+#
+#   /home/camilo/.config/ghostty/config
+#
+# The template does not set any default options, since Ghostty ships
+# with sensible defaults for all options. Users should only need to set
+# options that they want to change from the default.
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+
+# Config syntax crash course
+# ==========================
+theme = tokyonight_night
+# theme = Darkside
+class = Ghostty
+# fullscreen = true
+# window-decoration = none
+background-opacity = 0.92
+
+# Keybins Configuration
+# keybind = clear
+# keybind = global:cmd+r=
+keybind = all:alt+one=unbind
+keybind = all:alt+two=unbind
+keybind = all:alt+three=unbind
+keybind = all:alt+four=unbind
+keybind = all:alt+five=unbind
+keybind = all:alt+six=unbind
+keybind = all:alt+seven=unbind
+keybind = all:alt+eight=unbind
+keybind = all:alt+nine=unbind
+# keybind = all:alt+r=reload_config
+# keybind = all:ctrl+a=toggle_quick_terminal
+
+# keybind = ctrl+z>2 = goto_tab:2
+# keybind = ctrl+z>3 = goto_tab:3
+# keybind = ctrl+z>4 = goto_tab:4
+# keybind = ctrl+z>5 = goto_tab:5
+# keybind = ctrl+z>6 = goto_tab:6
+# keybind = ctrl+z>7 = goto_tab:7
+# keybind = ctrl+z>8 = goto_tab:8
+# keybind = ctrl+z>9 = goto_tab:9
+
