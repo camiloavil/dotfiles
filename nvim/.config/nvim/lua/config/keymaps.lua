@@ -5,7 +5,7 @@
 vim.keymap.set({ "n", "i", "v" }, "<C-x>", "<cmd> w <cr>", { desc = "CMD save buffer" })
 vim.api.nvim_set_keymap("n", ";", ":", { desc = "CMD enter command mode" })
 vim.api.nvim_set_keymap("i", "jj", "<ESC>", { desc = "CMD exit insert mode" })
-vim.api.nvim_set_keymap("n", "QQ", ":q!<enter>", { desc = "exit nvim" })
+vim.api.nvim_set_keymap("n", "QQ", ":qa!<enter>", { desc = "exit nvim" })
 
 vim.api.nvim_set_keymap("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>", { desc = "Navigate left in Tmux" })
 vim.api.nvim_set_keymap("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>", { desc = "Navigate down in Tmux" })
