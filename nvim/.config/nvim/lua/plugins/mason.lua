@@ -1,6 +1,10 @@
 return {
   {
     "williamboman/mason.nvim",
+    dependencies = {
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
+    },
+
     config = function()
       require("mason").setup({
         ui = {
@@ -11,11 +15,7 @@ return {
           },
         },
       })
-    end,
-  },
-  {
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-    config = function()
+
       require("mason-tool-installer").setup({
         ensure_installed = {
           "lua-language-server",
@@ -32,14 +32,18 @@ return {
           "shellcheck",
           "json-to-struct",
           { "bash-language-server", auto_update = true },
+          "prettier", -- prettier formatter
+          "isort", -- python formatter
+          "pylint",
+          "eslint_d",
         },
         auto_update = false,
         run_on_start = true,
-        integrations = {
-          ["mason-lspconfig"] = true,
-          ["mason-null-ls"] = true,
-          ["mason-nvim-dap"] = true,
-        },
+        -- integrations = {
+        --   ["mason-lspconfig"] = true,
+        --   ["mason-null-ls"] = true,
+        --   ["mason-nvim-dap"] = true,
+        -- },
       })
     end,
   },
