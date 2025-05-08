@@ -26,42 +26,42 @@ return {
     end,
     keys = {
         {
-            "<leader>fg",
+            "<leader>tg",
             function()
                 require("telescope.builtin").git_files({ show_untracked = true })
             end,
             desc = "Telescope Git Files",
         },
         {
-            "<leader>fb",
+            "<leader>tb",
             function()
                 require("telescope.builtin").buffers()
             end,
             desc = "Telescope buffers",
         },
         {
-            "<leader>fs",
+            "<leader>ts",
             function()
                 require("telescope.builtin").git_status()
             end,
             desc = "Telescope Git status",
         },
         {
-            "<leader>gc",
+            "<leader>tc",
             function()
                 require("telescope.builtin").git_bcommits()
             end,
-            desc = "Telescope Git status",
+            desc = "Telescope Git commits",
         },
         {
-            "<leader>gb",
+            "<leader>tb",
             function()
                 require("telescope.builtin").git_branches()
             end,
             desc = "Telescope Git branches",
         },
         {
-            "<leader>fp",
+            "<leader>tp",
             function()
                 require("telescope.builtin").find_files({
                     prompt_title = "Plugins",
@@ -81,21 +81,21 @@ return {
             desc = "Telescope find plugins",
         },
         {
-            "<leader>fq",
+            "<leader>tf",
             function()
                 require("telescope.builtin").find_files()
             end,
             desc = "Telescope Find Files",
         },
         {
-            "<leader>fh",
+            "<leader>th",
             function()
                 require("telescope.builtin").help_tags()
             end,
             desc = "Telescope Help",
         },
         {
-            "<leader>fn",
+            "<leader>tn",
             function()
                 require("telescope").extensions.file_browser.file_browser({ path = "%:h:p", select_buffer = true })
             end,
