@@ -9,7 +9,7 @@ return {
       formatters_by_ft = {
         lua = { "stylua" },
         python = { "isort", "black" },
-        -- python = { "black" },
+        -- python = { { "isort", "black" } },
         javascript = { "prettier" },
         typescript = { "prettier" },
         svelte = { "prettier" },
@@ -34,9 +34,4 @@ return {
       })
     end, { desc = "Format file or range (in visual mode)" })
   end,
-  -- {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   opts = require("config.treesitter"),
-  -- },
-  -- { "echasnovski/mini.nvim", version = false },
 }
