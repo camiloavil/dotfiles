@@ -121,4 +121,6 @@ eval "$(uv generate-shell-completion zsh)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Agregar al PATH la versión de Python gestionada por UV
+export PATH="$HOME/.local/share/uv/python/cpython-3.12.0-linux-x86_64-gnu/bin:$PATH"
 
