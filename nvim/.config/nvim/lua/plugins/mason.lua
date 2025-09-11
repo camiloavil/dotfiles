@@ -27,14 +27,13 @@ return {
           "black",
           "mypy",
           "pyright",
-          "ruff",
+          -- "ruff",
           "stylua",
           "shellcheck",
           "json-to-struct",
           { "bash-language-server", auto_update = true },
           "prettier", -- prettier formatter
           "isort", -- python formatter
-          "pylint",
           "eslint_d",
         },
         auto_update = false,

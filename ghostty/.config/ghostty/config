@@ -20,9 +20,15 @@
 theme = tokyonight_night
 # theme = Darkside
 class = Ghostty
-# fullscreen = true
 # window-decoration = none
 background-opacity = 0.92
+fullscreen = true
+
+# font_family      GohuFont uni14 Nerd Font
+# bold_font        GohuFont 15 Nerd Font Mono
+# italic_font      auto
+# bold_italic_font auto
+# font_size = 10.0
 
 # Keybins Configuration
 # keybind = clear

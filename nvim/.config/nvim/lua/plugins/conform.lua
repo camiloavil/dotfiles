@@ -8,7 +8,8 @@ return {
     conform.setup({
       formatters_by_ft = {
         lua = { "stylua" },
-        python = { "isort", "black" },
+        -- python = { "black" },
+        python = { "isort", "ruff_format" },
         -- python = { { "isort", "black" } },
         javascript = { "prettier" },
         typescript = { "prettier" },
