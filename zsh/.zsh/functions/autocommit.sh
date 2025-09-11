@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+# echo "Loading autocommit function" >&2
 autocommit() {
     if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
         echo "Error: Not a Git repository. Please navigate to a Git repository and try again."

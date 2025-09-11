@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+# echo "Loading check_env_key function" >&2
 check_env_key() {
   # Generic function to retrieve and set an API key from password store
   # Parameters:

@@ -18,5 +18,7 @@ done
 
 # Validate llm
 validate_command "llm"
+# Validate ruff
+validate_command "ruff"
 # Validate npm
 validate_command "npm"

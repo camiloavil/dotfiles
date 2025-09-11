@@ -1,12 +1,9 @@
 [default_session]
-startup_command = "source init.sh || pyfiglet '$current_dir'"
-# startup_command = "nvim -c ':Telescope find_files'"
-# echo "        Current Project: $(basename "$PWD")
+startup_command = "source ~/.config/sesh/init.sh"
 
 [[session]]
 name = "MyHome"
 path = "~/"
-startup_command = "pyfiglet 'Welcome to my home'"
 
 [[session]]
 name = "Downloads 📥"
@@ -18,6 +15,11 @@ name = "ZSH config"
 path = "~/dotfiles/zsh/"
 startup_command = "nvim .zshrc"
 preview_command = "lsd --tree"
+
+[[session]]
+name = "Kanata"
+path = "~/.config/kanata/"
+startup_command = "nvim kanata.kbd"
 
 [[session]]
 name = "tmux config"
@@ -52,4 +54,8 @@ startup_command = "nvim ./sesh.toml"
 name = "Obsidian"
 path = "~/Nextcloud/Obsidian/"
 startup_command = "nvim"
+
+[[session]]
+name = "oci-cli"
+path = "~/dev/oci/"
 

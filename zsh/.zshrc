@@ -99,15 +99,13 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 source ~/.zsh/zsh_validations
 
 # load functions
-source ~/.zsh/functions/llm_wrapper.sh
-source ~/.zsh/functions/autocommit.sh
+source ~/.zsh/scripts/load_functions.sh
 
 # Load aliases
 source ~/.zsh/zsh_alias
 
 #Sesh Integration
 source ~/.zsh/zsh_sesh
-
 # StarShip
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
@@ -121,6 +119,10 @@ eval "$(uv generate-shell-completion zsh)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-# Agregar al PATH la versión de Python gestionada por UV
-export PATH="$HOME/.local/share/uv/python/cpython-3.12.0-linux-x86_64-gnu/bin:$PATH"
+# Add oci cli oracle-cli to path
+export PATH=/home/camilo/.oci/bin:$PATH
+[[ -e "/home/camilo/.oci/lib/oracle-cli/lib/python3.12/site-packages/oci_cli/bin/oci_autocomplete.sh" ]] && source "/home/camilo/.oci/lib/oracle-cli/lib/python3.12/site-packages/oci_cli/bin/oci_autocomplete.sh"
+
+#alias python = "uv run python"
+#alias pip = "uv pip"
 

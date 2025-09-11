@@ -1,5 +1,6 @@
 source ~/.zsh/functions/check_env.sh
 
+# echo "Loading llm_wrapper function" >&2
 # Create a wrapper function for llm instead of an alias to avoid recursion
 llm_wrapper() {
   # Define the environment variable and pass path
