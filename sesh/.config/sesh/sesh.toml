@@ -46,6 +46,16 @@ name = "Dot Files"
 path = "~/dotfiles/"
 
 [[session]]
+name = "Ansible"
+path = "~/dev/ansible/balcones"
+# startup_command = "nvim ./config"
+
+[[session]]
+name = "SSH configs"
+path = "~/.ssh/"
+startup_command = "nvim ./config"
+
+[[session]]
 name = "Sesh Configs"
 path = "~/.config/sesh/"
 startup_command = "nvim ./sesh.toml"
