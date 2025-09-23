@@ -17,7 +17,7 @@
 
 # Config syntax crash course
 # ==========================
-theme = tokyonight_night
+# theme = tokyonight_night
 # theme = Darkside
 class = Ghostty
 # window-decoration = none
