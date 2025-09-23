@@ -59,6 +59,7 @@ zinit cdreplay -q
 # bindkey -e
 # bindkey '^p' history-search-backward
 # bindkey '^n' history-search-forward
+# bindkey '^[w' kill-region
 
 # Vi mode
 bindkey -v
@@ -66,20 +67,23 @@ export VI_MODE_SET_CURSOR=true
 # Configure keybindings in Vi normal mode
 bindkey -M vicmd 'k' history-search-backward  # Use 'k' to search backward in history
 bindkey -M vicmd 'j' history-search-forward   # Use 'j' to search forward in history
+bindkey -M vicmd 'ff' clear-screen
+
 
 # Configure keybindings in Vi insert mode
 bindkey -M viins '^f' autosuggest-accept  # Use 'Ctrl + f' to accept autosuggestions in Vi insert mode
 bindkey -M viins '^p' history-search-backward # Use 'Ctrl + p' to search backward in history
 bindkey -M viins '^n' history-search-forward  # Use 'Ctrl + n' to search forward in history
-bindkey -M viins '^l' vi-cmd-mode  # Use 'Ctrl + l' to exit insert mode in Vi
-
-bindkey '^[w' kill-region
+bindkey -M viins 'jj' vi-cmd-mode  # Use 'jj' to exit insert mode in Vi
+bindkey -M viins 'ff' clear-screen
 
 # History
 HISTSIZE=50000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
+setopt share_history
+setopt inc_append_history
 setopt appendhistory
 setopt sharehistory
 setopt hist_ignore_space
@@ -87,6 +91,26 @@ setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
+setopt hist_reduce_blanks
+setopt EXTENDED_HISTORY
+
+# Prefijos de comandos que NO deben guardarse en el historial
+IGNORED_HISTORY_PREFIXES=("ll" "llm" "oci")
+
+zshaddhistory() {
+  local cmd=$1
+  # 1. Omitir si empieza con prefijo ignorado
+  for prefix in "${IGNORED_HISTORY_PREFIXES[@]}"; do
+    if [[ $cmd == ${prefix}* ]]; then
+      return 1
+    fi
+  done
+  # 2. Omitir si contiene salto de línea (multilínea)
+  if [[ $cmd == *$'\n'* ]]; then
+    return 1
+  fi
+  return 0  # guardar normalmente
+}
 
 # Completion styling
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'

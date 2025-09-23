@@ -2,12 +2,13 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 # Inserta una línea en blanco entre las instrucciones del intérprete de comandos
-add_newline = false
+add_newline = true
 
 # Reemplaza el símbolo '❯' en el prompt con ''➜'
 [character] # El nombre del módulo que estamos configurando es 'character'
-success_symbol = '[➜](bold red)' # El segmento 'success_symbol' se está configurando en '➜'  con el color 'bold green'
-vicmd_symbol = '[➜](bold green)'
+success_symbol = '[➜](bold yellow)'
+error_symbol   = '[➜](bold red)'
+vicmd_symbol   = '[⇐](bold purple)'
 
 # Desactiva el módulo del paquete, ocultándolo del prompt completamente
 #[package]
