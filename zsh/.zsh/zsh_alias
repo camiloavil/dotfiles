@@ -1,13 +1,13 @@
 # Use the wrapper function in aliases
-alias l="llm"    # Short alias for llm
-alias lc="llm -c"  # For conversation mode
-alias le="llm -t english"  # Translate to English
+alias llmc="llm -c"  # For conversation mode
+alias llme="llm -t english"  # Translate to English
 # Example aliases
 alias ls="lsd -alh"
 alias cl="clear"
 alias nv="nvim"
 alias vim="nvim"
 alias lg="lazygit"
+alias ping="ping -c5"
 # Alias VPN
 alias vpnStop="sudo systemctl stop 'wg-quick@*'"
 # alias vpnKmiP="sudo systemctl start wg-quick@KmiPersonal.service"
@@ -19,8 +19,12 @@ alias pa="pass -c "
 # Alias kanata
 alias ka="systemctl --user start kanata"
 alias kas="systemctl --user stop kanata"
-#
 # My functions alias
 alias ac="autocommit"
 alias llm="llm_wrapper"
-
+# load_shares
+alias nas="~/.zsh/scripts/load_shares.sh"
+alias nas_smb="~/.zsh/scripts/load_shares.sh up smb"
+alias nas_nfs="sudo ~/.zsh/scripts/load_shares.sh up nfs"
+alias nas_all="~/.zsh/scripts/load_shares.sh up all"
+alias nas_down="sudo ~/.zsh/scripts/load_shares.sh down all"

@@ -2,69 +2,232 @@
 
 # Archivo: ~/.zsh/scripts/load_shares.sh
 
-MOUNT_POINT="/mnt/nas_earth"
-NAS_SHARE="//nas.knet/all"
-NAS_USER="kmi"
-PASS_PATH="systems/smbuser/smb_kmi"  # Ruta en pass
+# --- Variables de configuración y colores ---
+HOST_SMB="nas.knet"
+MOUNT_POINT_SMB="/mnt/nas_earth"
+NAS_SHARE_SMB="//$HOST_SMB/all"
+NAS_USER_SMB="kmi"
+ACCESS_PASS_PATH_SMB="systems/balcones/smbusers/smb_kmi"
+SYMLINK_SMB="$HOME/nas_earth"
 
-# --- Función para validar root ---
+HOST_NFS="proxmox_balcones.knet"
+MOUNT_POINT_NFS="/mnt/netsystems"
+NAS_SHARE_NFS="10.10.10.2:/mnt/pve/hdd_local/netsystems"
+SYMLINK_NFS="$HOME/netsystems"
+
+# Códigos de color ANSI
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+YELLOW="\033[0;33m"
+NC="\033[0m" # Sin color
+
+# --- Funciones de Ayuda y Estado ---
+show_help() {
+    echo "Gestión de shares de red (SMB y NFS)"
+    echo
+    echo "Uso: $0 [opción] [tipo_de_share]"
+    echo
+    echo "Opciones:"
+    echo "  up {smb|nfs|all}   Monta la share especificada o todas."
+    echo "  down {smb|nfs|all} Desmonta la share especificada o todas."
+    echo "  status             Verifica el estado de los montajes."
+    echo "  -h, --help         Muestra esta ayuda."
+    echo
+    echo "Ejemplo:"
+    echo "  $0 up smb"
+    echo "  $0 down all"
+    echo "  $0 status"
+}
+
+check_status() {
+    echo -e "${YELLOW}--- Estado de los montajes ---${NC}"
+    
+    # Verificar SMB
+    if mountpoint -q "$MOUNT_POINT_SMB"; then
+        echo -e "${GREEN}✅ SMB: $MOUNT_POINT_SMB está montado.${NC}"
+    else
+        echo -e "${RED}❌ SMB: $MOUNT_POINT_SMB no está montado.${NC}"
+    fi
+    
+    # Verificar NFS
+    if mountpoint -q "$MOUNT_POINT_NFS"; then
+        echo -e "${GREEN}✅ NFS: $MOUNT_POINT_NFS está montado.${NC}"
+    else
+        echo -e "${RED}❌ NFS: $MOUNT_POINT_NFS no está montado.${NC}"
+    fi
+    
+    echo -e "${YELLOW}---${NC}"
+}
+
+# --- Funciones Auxiliares ---
 require_root() {
     if [[ $EUID -ne 0 ]]; then
-        echo "❌ Este script debe ejecutarse como root" >&2
+        echo -e "${RED}❌ Este script debe ejecutarse como root.${NC}" >&2
         exit 1
     fi
 }
 
-# --- Función para montar ---
-mount_share() {
-    echo "🔗 Montando NAS en $MOUNT_POINT" >&2
-    # Chequeo si ya está montado
-    if mountpoint -q "$MOUNT_POINT"; then
-        echo "⚠️ $MOUNT_POINT ya está montado." >&2
-        exit 0
-    fi
-    mkdir -p "$MOUNT_POINT"
-    # Obtener contraseña directamente desde pass
-    if ! SMB_PASS=$(pass show "$PASS_PATH" 2>/dev/null); then
-        echo "❌ No se pudo obtener contraseña desde pass ($PASS_PATH)" >&2
+check_nas_accessibility() {
+    echo -n "🔍 Verificando la accesibilidad de la NAS en $HOST_SMB..." >&2
+    if ! ping -c 1 -W 1 "$HOST_SMB" >/dev/null 2>&1; then
+        echo -e "\n${RED}❌ La NAS no es accesible. No se puede continuar.${NC}" >&2
         exit 1
     fi
-    sudo mount -t cifs "$NAS_SHARE" "$MOUNT_POINT" \
-        -o username=$NAS_USER,password=$SMB_KMI,uid=$(id -u),gid=$(id -g),noperm
-        # -o username=$NAS_USER,password=$SMB_KMI,uid=$(id -u),gid=$(id -g),file_mode=0664,dir_mode=0775
-
-    mkdir -p /mnt/netsystems
-    # sudo mount -t nfs 10.10.10.49:/mnt/pve/hdd_local/netsystems /mnt/netsystems
+    echo -e "${GREEN}✅ accesible.${NC}" >&2
 }
 
-# --- Función para desmontar ---
-umount_share() {
-    echo "🔌 Desmontando NAS de $MOUNT_POINT" >&2
-    # Chequeo si realmente está montado
-    if ! mountpoint -q "$MOUNT_POINT"; then
-        echo "⚠️ $MOUNT_POINT no está montado." >&2
-        exit 0
+create_symlink() {
+    local target="$1"
+    local symlink="$2"
+    if [[ ! -e "$symlink" ]]; then
+        ln -s "$target" "$symlink"
+        echo -e "${GREEN}🔗 Enlace simbólico creado: $symlink -> $target${NC}"
     fi
+}
 
-    sudo umount "$MOUNT_POINT" || {
-        echo "⚠️ No se pudo desmontar $MOUNT_POINT (¿ya está desmontado?)." >&2
+remove_symlink() {
+    local symlink="$1"
+    if [[ -L "$symlink" ]]; then
+        rm "$symlink"
+        echo -e "${YELLOW}❌ Enlace simbólico eliminado: $symlink${NC}"
+    fi
+}
+
+# --- Funciones de Montaje ---
+mount_smb_share() {
+    check_nas_accessibility
+    echo -e "🔗 Montando NAS SMB en ${YELLOW}$MOUNT_POINT_SMB${NC}..." >&2
+    
+    if mountpoint -q "$MOUNT_POINT_SMB"; then
+        echo -e "${YELLOW}⚠️ $MOUNT_POINT_SMB ya está montado.${NC}" >&2
+        return 0
+    fi
+    
+    mkdir -p "$MOUNT_POINT_SMB"
+    
+    if ! SMB_PASS=$(pass show "$ACCESS_PASS_PATH_SMB" 2>/dev/null); then
+        echo -e "${RED}❌ No se pudo obtener contraseña desde pass ($ACCESS_PASS_PATH_SMB).${NC}" >&2
         exit 1
-    }
+    fi
+    
+    sudo mount -t cifs "$NAS_SHARE_SMB" "$MOUNT_POINT_SMB" \
+        -o username=$NAS_USER_SMB,password="$SMB_PASS",uid=$(id -u),gid=$(id -g),noperm
+        
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✅ Montaje SMB exitoso.${NC}"
+        create_symlink "$MOUNT_POINT_SMB" "$SYMLINK_SMB"
+    else
+        echo -e "${RED}❌ Fallo al montar SMB. Revisa las credenciales o permisos.${NC}"
+    fi
+}
+
+mount_nfs_share() {
+    echo -e "🔗 Montando NAS NFS en ${YELLOW}$MOUNT_POINT_NFS${NC}..." >&2
+    
+    if mountpoint -q "$MOUNT_POINT_NFS"; then
+        echo -e "${YELLOW}⚠️ $MOUNT_POINT_NFS ya está montado.${NC}" >&2
+        return 0
+    fi
+    
+    mkdir -p "$MOUNT_POINT_NFS"
+    
+    sudo mount -t nfs "$NAS_SHARE_NFS" "$MOUNT_POINT_NFS"
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✅ Montaje NFS exitoso.${NC}"
+        create_symlink "$MOUNT_POINT_NFS" "$SYMLINK_NFS"
+    else
+        echo -e "${RED}❌ Fallo al montar NFS. Revisa la configuración del servidor.${NC}"
+    fi
+}
+
+# --- Funciones de Desmontaje ---
+umount_smb_share() {
+    echo -e "🔌 Desmontando SMB de ${YELLOW}$MOUNT_POINT_SMB${NC}..." >&2
+    
+    if ! mountpoint -q "$MOUNT_POINT_SMB"; then
+        echo -e "${YELLOW}⚠️ $MOUNT_POINT_SMB no está montado.${NC}" >&2
+        return 0
+    fi
+    
+    sudo umount "$MOUNT_POINT_SMB"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✅ Desmontaje SMB exitoso.${NC}"
+        remove_symlink "$SYMLINK_SMB"
+    else
+        echo -e "${RED}❌ No se pudo desmontar $MOUNT_POINT_SMB.${NC}" >&2
+        exit 1
+    fi
+}
+
+umount_nfs_share() {
+    echo -e "🔌 Desmontando NFS de ${YELLOW}$MOUNT_POINT_NFS${NC}..." >&2
+    
+    if ! mountpoint -q "$MOUNT_POINT_NFS"; then
+        echo -e "${YELLOW}⚠️ $MOUNT_POINT_NFS no está montado.${NC}" >&2
+        return 0
+    fi
+    
+    sudo umount "$MOUNT_POINT_NFS"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✅ Desmontaje NFS exitoso.${NC}"
+        remove_symlink "$SYMLINK_NFS"
+    else
+        echo -e "${RED}❌ No se pudo desmontar $MOUNT_POINT_NFS.${NC}" >&2
+        exit 1
+    fi
 }
 
 # --- Lógica principal ---
-# require_root
-
 case "$1" in
     up)
-        mount_share
+        case "$2" in
+            smb)
+                mount_smb_share
+                ;;
+            nfs)
+                require_root
+                mount_nfs_share
+                ;;
+            all)
+                mount_smb_share
+                mount_nfs_share
+                ;;
+            *)
+                echo -e "${RED}❌ Tipo de share no especificado.${NC}" >&2
+                show_help
+                exit 1
+                ;;
+        esac
         ;;
     down)
-        umount_share
+        require_root
+        case "$2" in
+            smb)
+                umount_smb_share
+                ;;
+            nfs)
+                umount_nfs_share
+                ;;
+            all)
+                umount_smb_share
+                umount_nfs_share
+                ;;
+            *)
+                echo -e "${RED}❌ Tipo de share no especificado.${NC}" >&2
+                show_help
+                exit 1
+                ;;
+        esac
+        ;;
+    status)
+        check_status
+        ;;
+    -h|--help)
+        show_help
         ;;
     *)
-        echo "Uso: $0 {up|down}" >&2
-        exit 1
+        check_status
+        exit 0
         ;;
 esac
-
