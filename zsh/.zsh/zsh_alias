@@ -8,6 +8,7 @@ alias nv="nvim"
 alias vim="nvim"
 alias lg="lazygit"
 alias ping="ping -c5"
+alias copyfile="xsel --clipboard <"
 # Alias VPN
 alias vpnStop="sudo systemctl stop 'wg-quick@*'"
 # alias vpnKmiP="sudo systemctl start wg-quick@KmiPersonal.service"

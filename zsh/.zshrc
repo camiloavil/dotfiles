@@ -85,7 +85,6 @@ HISTDUP=erase
 setopt share_history
 setopt inc_append_history
 setopt appendhistory
-setopt sharehistory
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups

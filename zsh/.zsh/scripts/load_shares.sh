@@ -12,7 +12,7 @@ SYMLINK_SMB="$HOME/nas_earth"
 
 HOST_NFS="proxmox_balcones.knet"
 MOUNT_POINT_NFS="/mnt/netsystems"
-NAS_SHARE_NFS="10.10.10.2:/mnt/pve/hdd_local/netsystems"
+NAS_SHARE_NFS="$HOST_NFS:/mnt/pve/hdd_local/netsystems"
 SYMLINK_NFS="$HOME/netsystems"
 
 # Códigos de color ANSI
