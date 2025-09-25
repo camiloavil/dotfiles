@@ -24,11 +24,11 @@ class = Ghostty
 background-opacity = 0.92
 fullscreen = true
 
-# font_family      GohuFont uni14 Nerd Font
-# bold_font        GohuFont 15 Nerd Font Mono
-# italic_font      auto
-# bold_italic_font auto
-# font_size = 10.0
+font-family = "Fira Code Retina"
+font-family-bold = "Fira Code SemiBold"
+font-family-italic = "Fira Code Regular"
+font-family-bold-italic = "Fira Code Bold"
+font-size = 9.0
 
 # Keybins Configuration
 # keybind = clear
@@ -42,8 +42,8 @@ keybind = all:alt+six=unbind
 keybind = all:alt+seven=unbind
 keybind = all:alt+eight=unbind
 keybind = all:alt+nine=unbind
-# keybind = all:alt+r=reload_config
-# keybind = all:ctrl+a=toggle_quick_terminal
+keybind = all:alt+r=reload_config
+# keybind = all:alt+e=toggle_quick_terminal
 
 # keybind = ctrl+z>2 = goto_tab:2
 # keybind = ctrl+z>3 = goto_tab:3
