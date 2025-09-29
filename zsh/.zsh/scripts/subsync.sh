@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 # Función mejorada para ajustar subtítulos con FFmpeg
 # Uso: subsync -f 2.5 -s archivo.srt  (adelantar 2.5 segundos)
 # Uso: subsync -b 1.8 -s archivo.srt  (atrasar 1.8 segundos)
@@ -5,6 +7,7 @@
 # Uso: subsync -f 2.5 -s video*.srt -r  (múltiples archivos y reemplazar)
 
 subsync() {
+    set -euo pipefail # Añadido para robustez
     local direction=""
     local seconds=""
     local subtitle_files=()
@@ -148,7 +151,7 @@ subsync() {
         fi
         
         # Ejecutar FFmpeg
-        if ffmpeg -itsoffset "$offset" -i "$subtitle_file" -c copy "$output_file" -y 2>/dev/null; then
+        if ffmpeg -itsoffset "$offset" -i "$subtitle_file" -c copy "$output_file" -y; then # Eliminado 2>/dev/null
             if [[ "$replace_mode" == true ]]; then
                 mv "$output_file" "$final_file"
                 echo "✅ Archivo reemplazado: $final_file"
@@ -165,4 +168,4 @@ subsync() {
     # Resumen final
     echo "📊 Resumen: $success_count/$total_count archivos procesados exitosamente"
 }
-
+subsync "$@"

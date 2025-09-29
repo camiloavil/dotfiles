@@ -30,4 +30,4 @@ alias nas_nfs="sudo ~/.zsh/scripts/load_shares.sh up nfs"
 alias nas_all="~/.zsh/scripts/load_shares.sh up all"
 alias nas_down="sudo ~/.zsh/scripts/load_shares.sh down all"
 # aliases Subtitles
-alias ss='subsync'
+alias ss='~/.zsh/scripts/subsync.sh'
