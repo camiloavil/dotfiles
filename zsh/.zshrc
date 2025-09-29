@@ -79,36 +79,37 @@ bindkey -M viins 'ff' clear-screen
 
 # History
 HISTSIZE=50000
-HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
-HISTDUP=erase
-setopt share_history
-setopt inc_append_history
+HISTFILE=~/.zsh_history
 setopt appendhistory
+setopt inc_append_history
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
-setopt hist_ignore_dups
-setopt hist_find_no_dups
 setopt hist_reduce_blanks
-setopt EXTENDED_HISTORY
+setopt hist_find_no_dups
+
+# setopt share_history
+# setopt EXTENDED_HISTORY
 
 # Prefijos de comandos que NO deben guardarse en el historial
-IGNORED_HISTORY_PREFIXES=("ll" "llm" "oci")
+IGNORED_HISTORY_PREFIXES=("llm" "llme" "oci")
 
 zshaddhistory() {
-  local cmd=$1
-  # 1. Omitir si empieza con prefijo ignorado
+  emulate -L zsh
+  setopt EXTENDED_GLOB
+
+  local cmd=${1%%$'\n'}   # limpia un posible salto final
+
+  # 1. Omitir prefijos
   for prefix in "${IGNORED_HISTORY_PREFIXES[@]}"; do
-    if [[ $cmd == ${prefix}* ]]; then
-      return 1
-    fi
+    [[ $cmd == ${prefix}* ]] && return 1
   done
-  # 2. Omitir si contiene salto de línea (multilínea)
-  if [[ $cmd == *$'\n'* ]]; then
-    return 1
-  fi
-  return 0  # guardar normalmente
+
+  # 2. Omitir multilínea
+  [[ $cmd == *$'\n'* ]] && return 1
+
+  return 0
 }
 
 # Completion styling
