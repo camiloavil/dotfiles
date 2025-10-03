@@ -119,6 +119,9 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
+#Sesh Integration
+source ~/.zsh/zsh_sesh
+
 # Validate Tools
 source ~/.zsh/zsh_validations
 
@@ -128,8 +131,6 @@ source ~/.zsh/scripts/load_functions.sh
 # Load aliases
 source ~/.zsh/zsh_alias
 
-#Sesh Integration
-source ~/.zsh/zsh_sesh
 # StarShip
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
