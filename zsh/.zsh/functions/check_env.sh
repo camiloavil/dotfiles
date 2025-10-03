@@ -48,6 +48,7 @@ check_env_key() {
       return 1
     fi
 
+    api_key="$(printf "%s" "$api_key" | head -n1 | tr -d '\r')"
     api_key="${api_key//$'\r'/}"
     api_key="${api_key//$'\n'/}"
     api_key="${api_key#${api_key%%[![:space:]]*}}"
