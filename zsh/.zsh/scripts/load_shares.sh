@@ -6,7 +6,6 @@
 HOST_SMB="nas.knet"
 MOUNT_POINT_SMB="/mnt/nas_earth"
 NAS_SHARE_SMB="//$HOST_SMB/all"
-NAS_USER_SMB="kmi"
 ACCESS_PASS_PATH_SMB="systems/balcones/smbusers/smb_kmi"
 SYMLINK_SMB="$HOME/nas_earth"
 
@@ -105,13 +104,24 @@ mount_smb_share() {
     
     mkdir -p "$MOUNT_POINT_SMB"
     
-    if ! SMB_PASS=$(pass show "$ACCESS_PASS_PATH_SMB" 2>/dev/null); then
+    local PASS_DATA=""
+    if ! PASS_DATA=$(pass show "$ACCESS_PASS_PATH_SMB" 2>/dev/null); then
         echo -e "${RED}❌ No se pudo obtener contraseña desde pass ($ACCESS_PASS_PATH_SMB).${NC}" >&2
         exit 1
     fi
     
+    local SMB_PASS=""
+    local SMB_USER=""
+    SMB_PASS="$(printf "%s" "$PASS_DATA" | head -n1 | tr -d '\r')"
+    SMB_USER="$(printf "%s" "$PASS_DATA" | sed -n 2p | tr -d '[:space:]\t')"
+    if [[ "$SMB_USER" == user:* ]]; then
+      SMB_USER="${SMB_USER#user:}"
+    else
+      echo "Error: Horror: user not found!!!"
+      exit 1
+    fi
     sudo mount -t cifs "$NAS_SHARE_SMB" "$MOUNT_POINT_SMB" \
-        -o username=$NAS_USER_SMB,password="$SMB_PASS",uid=$(id -u),gid=$(id -g),noperm
+        -o username=$SMB_USER,password="$SMB_PASS",uid=$(id -u),gid=$(id -g),noperm
         
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ Montaje SMB exitoso.${NC}"
@@ -201,7 +211,7 @@ case "$1" in
         esac
         ;;
     down)
-        require_root
+        # require_root
         case "$2" in
             smb)
                 umount_smb_share
