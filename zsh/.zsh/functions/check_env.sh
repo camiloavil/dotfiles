@@ -1,6 +1,9 @@
 #!/bin/zsh
 
-# echo "Loading check_env_key function" >&2
+# English description: load an API key from a password store and export env vars
+# - PASS_PATH: path to the password store entry (required)
+# - ENV_VAR_NAME: optional; if omitted, derived from basename(PASS_PATH)
+# - --force: optional; force reload of the key
 check_env_key() {
   local pass_path="$1"
   local env_var_name="$2"
@@ -11,9 +14,11 @@ check_env_key() {
     return 1
   fi
 
+  local base
+  base=$(basename "$pass_path")
+
+  # Derive env_var_name if not provided
   if [[ -z "$env_var_name" ]]; then
-    local base
-    base=$(basename "$pass_path")
     local derived
     derived=$(printf "%s" "$base" | tr '[:lower:]' '[:upper:]' | tr -cd 'A-Z0-9_')
     if [[ -z "$derived" || ! "$derived" =~ ^[A-Z_][A-Z0-9_]*$ ]]; then
@@ -28,9 +33,7 @@ check_env_key() {
     fi
   fi
 
-  local current_value
-  current_value=""
-  # Read current value indirectly if the variable is already set
+  local current_value=""
   if typeset -n _ENV_VAR_REF="$env_var_name" 2>/dev/null; then
     current_value="${_ENV_VAR_REF}"
   fi
@@ -48,17 +51,46 @@ check_env_key() {
       return 1
     fi
 
-    api_key="$(printf "%s" "$api_key" | head -n1 | tr -d '\r')"
-    api_key="${api_key//$'\r'/}"
-    api_key="${api_key//$'\n'/}"
-    api_key="${api_key#${api_key%%[![:space:]]*}}"
-    api_key="${api_key%${api_key##*[![:space:]]*}}"
-
-    # Set the variable name dynamically and export it
-    typeset -gx ${env_var_name}="$api_key"
+    # First line is the main env var
+    local first_line
+    first_line="$(printf "%s" "$api_key" | head -n1 | tr -d '\r')"
+    
+    # Export main var
+    typeset -gx "${env_var_name}"="$first_line"
     echo "$env_var_name loaded successfully." >&2
+
+    # Process remaining lines for KEY:VALUE
+    local rest
+    rest=$(printf "%s" "$api_key" | tail -n +2)
+    if [[ -n "$rest" ]]; then
+      local _base="$base"
+      while IFS= read -r line; do
+        line="$(printf "%s" "$line" | tr -d '[:space:]\t')"
+        # Trim whitespace
+        line="${line##[[:space:]]*}"
+        line="${line%%*[[:space:]]}"
+        [[ -z "$line" || "$line" =~ ^#.* ]] && continue
+        if [[ "$line" == *":"* ]]; then
+          local key="${line%%:*}"
+          local val="${line#*:}"
+          key="${key##[[:space:]]*}"
+          key="${key%%*[[:space:]]}"
+          val="${val##[[:space:]]*}"
+          val="${val%%*[[:space:]]}"
+          local key_norm
+          key_norm=$(printf "%s" "$key" | tr '[:lower:]' '[:upper:]' | tr -cd 'A-Z0-9_')
+          if [[ -n "$key_norm" ]]; then
+            local var_name="${_base}_${key_norm}"
+            var_name=$(printf "%s" "$var_name" | tr '[:lower:]' '[:upper:]' | tr -cd 'A-Z0-9_')
+            if [[ -n "$var_name" && "$var_name" =~ ^[A-Z_][A-Z0-9_]*$ ]]; then
+              typeset -gx "${var_name}"="$val"
+              echo "$var_name loaded from multiline." >&2
+            fi
+          fi
+        fi
+      done <<< "$rest"
+    fi
   fi
 
   return 0
 }
-
