@@ -132,3 +132,115 @@ source ~/.zsh/zsh_env
 #fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval "$(fzf --zsh)"
+
+# Función para ajustar subtítulos con FFmpeg
+# Uso: subsync -f 2.5 -s archivo.srt  (adelantar 2.5 segundos)
+# Uso: subsync -b 1.8 -s archivo.srt  (atrasar 1.8 segundos)
+
+subsync() {
+    local direction=""
+    local seconds=""
+    local subtitle_file=""
+    local output_file=""
+    
+    # Procesar argumentos
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -f|--forward)
+                direction="forward"
+                seconds="$2"
+                shift 2
+                ;;
+            -b|--backward)
+                direction="backward"
+                seconds="$2"
+                shift 2
+                ;;
+            -s|--subtitle)
+                subtitle_file="$2"
+                shift 2
+                ;;
+            -h|--help)
+                echo "Uso: subsync [OPCIÓN] -s ARCHIVO"
+                echo "Ajusta la sincronización de subtítulos usando FFmpeg"
+                echo ""
+                echo "Opciones:"
+                echo "  -f, --forward SEGUNDOS    Adelantar subtítulos N segundos"
+                echo "  -b, --backward SEGUNDOS   Atrasar subtítulos N segundos"
+                echo "  -s, --subtitle ARCHIVO    Archivo de subtítulos a procesar"
+                echo "  -h, --help                Mostrar esta ayuda"
+                echo ""
+                echo "Ejemplos:"
+                echo "  subsync -f 2.5 -s pelicula.srt    # Adelanta 2.5 segundos"
+                echo "  subsync -b 1.8 -s serie.srt       # Atrasa 1.8 segundos"
+                return 0
+                ;;
+            *)
+                echo "Error: Opción desconocida '$1'"
+                echo "Usa 'subsync -h' para ver la ayuda"
+                return 1
+                ;;
+        esac
+    done
+    
+    # Validar argumentos
+    if [[ -z "$direction" ]]; then
+        echo "Error: Debes especificar -f (forward) o -b (backward)"
+        return 1
+    fi
+    
+    if [[ -z "$seconds" ]]; then
+        echo "Error: Debes especificar la cantidad de segundos"
+        return 1
+    fi
+    
+    if [[ -z "$subtitle_file" ]]; then
+        echo "Error: Debes especificar el archivo de subtítulos con -s"
+        return 1
+    fi
+    
+    if [[ ! -f "$subtitle_file" ]]; then
+        echo "Error: El archivo '$subtitle_file' no existe"
+        return 1
+    fi
+    
+    # Validar que seconds sea un número
+    if ! [[ "$seconds" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+        echo "Error: '$seconds' no es un número válido"
+        return 1
+    fi
+    
+    # Crear nombre del archivo de salida
+    local base_name="${subtitle_file%.*}"
+    local extension="${subtitle_file##*.}"
+    
+    if [[ "$direction" == "forward" ]]; then
+        output_file="${base_name}_adelantado_${seconds}s.${extension}"
+        offset="-${seconds}"
+        action="Adelantando"
+    else
+        output_file="${base_name}_atrasado_${seconds}s.${extension}"
+        offset="${seconds}"
+        action="Atrasando"
+    fi
+    
+    # Ejecutar FFmpeg
+    echo "${action} subtítulos ${seconds} segundos..."
+    echo "Archivo origen: $subtitle_file"
+    echo "Archivo destino: $output_file"
+    
+    if ffmpeg -itsoffset "$offset" -i "$subtitle_file" -c copy "$output_file" -y 2>/dev/null; then
+        echo "✅ Subtítulos ajustados exitosamente!"
+        echo "📁 Archivo creado: $output_file"
+    else
+        echo "❌ Error al procesar los subtítulos"
+        return 1
+    fi
+}
+
+# Opcional: Crear un alias más corto
+alias ss='subsync'
+
+
+# opencode
+export PATH=/home/kmiadmin/.opencode/bin:$PATH
