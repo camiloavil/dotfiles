@@ -1,6 +1,6 @@
 # Validate the existence of required commands
 
-source ~/.zsh/packages.conf
+source ~/.zsh/packages_server.conf
 
 function validate_command() {
     if ! command -v "$1" &> /dev/null; then
