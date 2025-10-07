@@ -32,3 +32,5 @@ alias nas_all="~/.zsh/scripts/load_shares.sh up all"
 alias nas_down="sudo ~/.zsh/scripts/load_shares.sh down all"
 # aliases Subtitles
 alias ss='~/.zsh/scripts/subsync.sh'
+# alias reset nvim
+alias reset_nvim="mv ~/.local/share/nvim{,.bak} && mv ~/.local/state/nvim{,.bak} && mv ~/.cache/nvim{,.bak}"
