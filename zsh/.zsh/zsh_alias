@@ -1,51 +1,34 @@
-function autocommit() {
-    if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-        echo "Error: Not a Git repository. Please navigate to a Git repository and try again."
-        return 1
-    fi
-
-    if git diff --cached --quiet; then
-        echo "Error: No changes staged for commit. Please stage your changes and try again."
-        return 1
-    fi
-
-    echo "Let's AutoCommit"
-    local commit_file="/tmp/commit.txt"
-    trap 'rm -f "$commit_file"; echo "Finish AutoCommit"' EXIT
-
-    if ! git diff --cached | llm -t gcommit > "$commit_file"; then
-        echo "Error: Failed to generate commit message."
-        return 1
-    fi
-
-    if ! less "$commit_file"; then
-        echo "Error: Failed to display commit message."
-        return 1
-    fi
-
-    if ! git commit -m "$(cat "$commit_file")"; then
-        echo "Error: Git commit failed."
-        return 1
-    fi
-}
-
-alias ac="autocommit"
-
+# Use the wrapper function in aliases
+alias llmc="llm -c"  # For conversation mode
+alias llme="llm -t english"  # Translate to English
 # Example aliases
-alias ls="ls -alh --color"
-alias c="clear"
+alias ls="lsd -alh"
+alias cl="clear"
 alias nv="nvim"
 alias vim="nvim"
 alias lg="lazygit"
+alias ping="ping -c5"
+alias copyfile="xsel --clipboard <"
+alias ssc='sesh-sessions'
 # Alias VPN
 alias vpnStop="sudo systemctl stop 'wg-quick@*'"
-alias vpnKmiP="sudo systemctl start wg-quick@KmiPersonal.service"
-alias vpnRpi="sudo systemctl start wg-quick@laptop_rpi.service"
-# Aliaa pass
+# alias vpnKmiP="sudo systemctl start wg-quick@KmiPersonal.service"
+# alias vpnRpi="sudo systemctl start wg-quick@laptop_rpi.service"
+alias vpnOci="sudo systemctl start wg-quick@kmilaptop.service"
+# Alias pass
 alias po="pass otp -c "
 alias pa="pass -c "
-# Alias llm
-alias l="llm"
-alias lc="llm -c"
-alias le="llm -t english"
-
+# Alias kanata
+alias ka="systemctl --user start kanata"
+alias kas="systemctl --user stop kanata"
+# My functions alias
+alias ac="autocommit"
+alias llm="llm_wrapper"
+# load_shares
+alias nas="~/.zsh/scripts/load_shares.sh"
+alias nas_smb="~/.zsh/scripts/load_shares.sh up smb"
+alias nas_nfs="sudo ~/.zsh/scripts/load_shares.sh up nfs"
+alias nas_all="~/.zsh/scripts/load_shares.sh up all"
+alias nas_down="sudo ~/.zsh/scripts/load_shares.sh down all"
+# aliases Subtitles
+alias ss='~/.zsh/scripts/subsync.sh'
