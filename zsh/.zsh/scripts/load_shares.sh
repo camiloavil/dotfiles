@@ -67,9 +67,14 @@ require_root() {
 }
 
 check_nas_accessibility() {
-    echo -n "🔍 Verificando la accesibilidad de la NAS en $HOST_SMB..." >&2
-    if ! ping -c 1 -W 1 "$HOST_SMB" >/dev/null 2>&1; then
-        echo -e "\n${RED}❌ La NAS no es accesible. No se puede continuar.${NC}" >&2
+    local host_to_check="$1"
+    if [[ -z "$host_to_check" ]]; then
+        echo -e "${RED}❌ host no especificado para check_nas_accessibility${NC}" >&2
+        exit 1
+    fi
+    echo -n "🔍 Verificando la accesibilidad de la NAS en $host_to_check..." >&2
+    if ! ping -c 1 -W 1 "$host_to_check" >/dev/null 2>&1; then
+        echo -e "\n${RED}❌ La NAS ($host_to_check) no es accesible.${NC}" >&2
         exit 1
     fi
     echo -e "${GREEN}✅ accesible.${NC}" >&2
@@ -94,7 +99,7 @@ remove_symlink() {
 
 # --- Funciones de Montaje ---
 mount_smb_share() {
-    check_nas_accessibility
+    check_nas_accessibility "$HOST_SMB"
     echo -e "🔗 Montando NAS SMB en ${YELLOW}$MOUNT_POINT_SMB${NC}..." >&2
     
     if mountpoint -q "$MOUNT_POINT_SMB"; then
@@ -132,6 +137,7 @@ mount_smb_share() {
 }
 
 mount_nfs_share() {
+    check_nas_accessibility "$HOST_NFS"
     echo -e "🔗 Montando NAS NFS en ${YELLOW}$MOUNT_POINT_NFS${NC}..." >&2
     
     if mountpoint -q "$MOUNT_POINT_NFS"; then
@@ -196,7 +202,6 @@ case "$1" in
                 mount_smb_share
                 ;;
             nfs)
-                require_root
                 mount_nfs_share
                 ;;
             all)
